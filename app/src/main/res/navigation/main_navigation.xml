@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/budgetPlanningFragment">
+
+    <fragment
+        android:id="@+id/budgetPlanningFragment"
+        android:name="com.dicoding.finego.BudgetPlanningFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_budget_planning"/>
+
+    <fragment
+        android:id="@+id/transactionTrackingFragment"
+        android:name="com.dicoding.finego.TransactionTrackingFragment"
+        android:label="fragment_finished_events"
+        tools:layout="@layout/fragment_transaction_tracking" />
+    <fragment
+        android:id="@+id/monthlyReportFragment"
+        android:name="com.dicoding.finego.MonthlyReportFragment"
+        android:label="fragment_upcoming_events"
+        tools:layout="@layout/fragment_monthly_report" />
+
+</navigation>

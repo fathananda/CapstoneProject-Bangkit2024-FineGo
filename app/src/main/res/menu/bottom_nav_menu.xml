@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/budgetPlanningFragment"
+        android:icon="@drawable/ic_budget_planning"
+        android:title="@string/budgetPlanning"
+        />
+    <item
+        android:id="@+id/transactionTrackingFragment"
+        android:icon="@drawable/ic_transaction_tracking"
+        android:title="@string/transactionTracking"
+        />
+    <item
+        android:id="@+id/monthlyReportFragment"
+        android:icon="@drawable/ic_monthly_report"
+        android:title="@string/monthlyReport"
+        />
+
+</menu>
