@@ -55,7 +55,7 @@
             android:textSize="30sp"/>
 
         <ProgressBar
-            android:id="@+id/progress_bar"
+            android:id="@+id/progressBar_batas_bulanan"
             android:layout_width="match_parent"
             android:layout_height="10dp"
             android:progressDrawable="@drawable/bg_progress_bar"
@@ -63,6 +63,72 @@
             android:progress="100000"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_marginTop="7dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_rasio_tabungan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rasio_tabungan"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_batas_bulanan_container"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_rasio_tabungan_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bg_rounded_corner_tabungan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_rasio_tabungan">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tabungan_berhasil"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            />
+
+        <FrameLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp">
+
+            <!-- Circular Progress -->
+            <ProgressBar
+                android:id="@+id/circularProgress"
+                style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminateOnly="false"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/circular_progress" />
+
+            <!-- TextView at center of Circular Progress -->
+            <TextView
+                android:id="@+id/centerProgressText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/nol_persen"
+                android:textSize="30sp"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif-medium" />
+        </FrameLayout>
 
     </LinearLayout>
 
@@ -76,7 +142,7 @@
         android:textSize="20sp"
         android:textColor="@color/black"
         android:layout_marginTop="15dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_batas_bulanan_container"
+        app:layout_constraintTop_toBottomOf="@id/ll_rasio_tabungan_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />

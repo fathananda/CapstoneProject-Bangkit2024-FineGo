@@ -111,5 +111,11 @@
     <string name="show_password">Show Password</string>
     <string name="makan">Makan</string>
     <string name="tabungan">Tabungan</string>
+    <string name="rasio_tabungan">Rasio Tabungan</string>
+    <string name="tabungan_berhasil">Hebat! Anda berhasil menyisihkan gaji bulan ini.</string>
+    <string name="nol_persen">0%</string>
+    <string name="tgl_lahir">Tanggal Lahir</string>
+    <string name="edit_profil">Edit Profil</string>
+    <string name="batal">Batal</string>
 
 </resources>
