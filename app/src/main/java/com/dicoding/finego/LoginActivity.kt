@@ -14,6 +14,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.lifecycleScope
+import com.dicoding.finego.api.ApiClient
 import com.dicoding.finego.databinding.ActivityLoginBinding
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -25,6 +26,9 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class LoginActivity : AppCompatActivity() {
@@ -103,7 +107,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-
     private fun signIn() {
         val credentialManager = CredentialManager.create(this)
 
@@ -167,10 +170,33 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null) {
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-            finish()
+            val userId = currentUser.uid
+            checkDataProfile(userId)
         }
     }
+
+    private fun checkDataProfile(userId: String) {
+        ApiClient.instance.getUserProfile(userId)
+            .enqueue(object : Callback<UserProfileResponse> {
+                override fun onResponse(
+                    call: Call<UserProfileResponse>,
+                    response: Response<UserProfileResponse>
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    } else {
+                        startActivity(Intent(this@LoginActivity, FormActivity::class.java))
+                        finish()
+                    }
+                }
+
+                override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
+                    Toast.makeText(this@LoginActivity, "Gagal memeriksa profil: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
 
     override fun onStart() {
         super.onStart()

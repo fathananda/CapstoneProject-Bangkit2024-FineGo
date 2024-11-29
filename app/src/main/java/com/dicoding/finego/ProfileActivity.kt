@@ -3,10 +3,15 @@ package com.dicoding.finego
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.dicoding.finego.api.ApiClient
 import com.dicoding.finego.databinding.ActivityProfileBinding
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.auth.FirebaseAuth
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Calendar
 import java.util.Locale
 
@@ -19,6 +24,8 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setEditMode(false)
+
+        getProfile()
 
         binding.btnEdit.setOnClickListener{
             setEditMode(true)
@@ -52,27 +59,58 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    private fun getProfile() {
+        val auth = FirebaseAuth.getInstance()
+        val userId = auth.currentUser?.uid.toString()
+        ApiClient.instance.getUserProfile(userId)
+            .enqueue(object : Callback<UserProfileResponse> {
+                override fun onResponse(
+                    call: Call<UserProfileResponse>,
+                    response: Response<UserProfileResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val userProfile = response.body()?.data
+                        if (userProfile != null) {
+                            binding.etNama.setText(userProfile.name ?: "")
+                            binding.etTglLahir.setText(userProfile.birthDate ?: "")
+                            binding.etProvinsi.setText(userProfile.province ?: "")
+                            binding.etPenghasilan.setText(userProfile.income.toString() ?: "")
+                            binding.etEmail.setText(userProfile.email ?: "")
+                            binding.etTabungan.setText(userProfile.savings.toString() ?: "")
+                        } else {
+                            println("Profil kosong atau tidak ditemukan.")
+                        }
+                    } else {
+                        println("Gagal mendapatkan profil: ${response.errorBody()?.string()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
+                    println("Error: ${t.localizedMessage}")
+                }
+            })
+    }
+
+
 
     private fun setEditMode(enabled: Boolean) {
-        binding.etUsername.isEnabled = enabled
+        binding.etNama.isEnabled = enabled
         binding.etTglLahir.isEnabled = enabled
-        binding.etPekerjaan.isEnabled = enabled
-        binding.etNoHandphone.isEnabled = enabled
         binding.etEmail.isEnabled = enabled
-        binding.etAlamat.isEnabled = enabled
+        binding.etProvinsi.isEnabled = enabled
+        binding.etPenghasilan.isEnabled = enabled
+        binding.etTabungan.isEnabled = enabled
     }
 
     private fun saveProfile() {
         // Simpan data profil ke database atau server di sini
-        val username = binding.etUsername.text.toString()
+        val nama = binding.etNama.text.toString()
         val tglLahir = binding.etTglLahir.text.toString()
-        val pekerjaan = binding.etPekerjaan.text.toString()
-        val noHandphone = binding.etNoHandphone.text.toString()
         val email = binding.etEmail.text.toString()
-        val alamat = binding.etAlamat.text.toString()
+        val provinsi = binding.etProvinsi.text.toString()
+        val penghasilan = binding.etPenghasilan.text.toString()
+        val tabungan = binding.etTabungan.text.toString()
 
-        // Contoh: log data (ganti dengan logika penyimpanan)
-        println("Data disimpan: $username, $tglLahir, $pekerjaan, $noHandphone, $email, $alamat")
     }
 
     private fun showMaterialDatePicker() {

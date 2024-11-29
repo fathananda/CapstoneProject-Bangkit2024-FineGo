@@ -31,6 +31,7 @@
     <string name="alamat">Alamat</string>
     <string name="submit">Submit</string>
     <string-array name="tempat_tinggal">
+        <item >--Pilih Provinsi--</item>
         <item android:value="Nanggroe Aceh Darussalam">Nanggroe Aceh Darussalam</item>
         <item android:value="Sumatera Utara">Sumatera Utara</item>
         <item android:value="Sumatera Selatan">Sumatera Selatan</item>
@@ -109,7 +110,7 @@
     <string name="masuk_sekarang">Masuk Sekarang</string>
     <string name="sudah_punya_akun">Sudah Punya Akun</string>
     <string name="show_password">Show Password</string>
-    <string name="makan">Makan</string>
+    <string name="makan">Makan/Bulan</string>
     <string name="tabungan">Tabungan</string>
     <string name="rasio_tabungan">Rasio Tabungan</string>
     <string name="tabungan_berhasil">Hebat! Anda berhasil menyisihkan gaji bulan ini.</string>
@@ -117,5 +118,9 @@
     <string name="tgl_lahir">Tanggal Lahir</string>
     <string name="edit_profil">Edit Profil</string>
     <string name="batal">Batal</string>
+    <string name="provinsi">Provinsi</string>
+    <string name="penghasilan">Penghasilan</string>
+    <string name="air_perbulan">Tagihan Air/Bulan</string>
+    <string name="pilih_provinsi">Pilih Provinsi</string>
 
 </resources>

@@ -11,6 +11,9 @@ import com.dicoding.finego.api.ApiClient
 import com.dicoding.finego.api.ApiService
 import com.dicoding.finego.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -75,17 +78,79 @@ class RegisterActivity : AppCompatActivity() {
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                binding.loading.visibility = View.GONE
                 if (task.isSuccessful) {
                     Log.d("RegisterActivity", "createUserWithEmail:success")
-                    Toast.makeText(this, "Registrasi berhasil. Silakan login.", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, LoginActivity::class.java))
-                    finish()
+                    callRegisterApi(email, password)
                 } else {
+                    binding.loading.visibility = View.GONE
                     Log.w("RegisterActivity", "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(this, "Registrasi gagal: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Registrasi gagal: ${task.exception?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
     }
 
+    private fun callRegisterApi(email: String, password: String) {
+        val request = RegisterRequest(email, password)
+
+        apiService.register(request)
+            .enqueue(object : Callback<RegisterResponse> {
+                override fun onResponse(
+                    call: Call<RegisterResponse>,
+                    response: Response<RegisterResponse>
+                ) {
+                    binding.loading.visibility = View.GONE
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()
+                        if (responseBody != null) {
+                            Log.d("RegisterActivity", "API Success: ${responseBody.message}, UID: ${responseBody.uid}")
+                            saveUidToSharedPreferences(responseBody.uid)
+
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "Registrasi berhasil. Silakan login.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                            finish()
+                        } else {
+                            Log.e("RegisterActivity", "Response body kosong")
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "Registrasi gagal. Respons tidak valid.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        Log.e("RegisterActivity", "API response error: ${response.errorBody()?.string()}")
+                        Toast.makeText(
+                            this@RegisterActivity,
+                            "Registrasi gagal di server.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                    binding.loading.visibility = View.GONE
+                    Log.e("RegisterActivity", "API call failed: ${t.message}", t)
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "Terjadi kesalahan koneksi.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+    }
+
+    private fun saveUidToSharedPreferences(uid: String) {
+        val sharedPreferences = getSharedPreferences("FineGoPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("user_uid", uid)
+        editor.apply()
+        Log.d("RegisterActivity", "UID berhasil disimpan: $uid")
+    }
 }
