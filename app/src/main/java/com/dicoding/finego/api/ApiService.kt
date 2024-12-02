@@ -1,5 +1,7 @@
 package com.dicoding.finego.api
 
+import com.dicoding.finego.LoginRequest
+import com.dicoding.finego.LoginResponse
 import com.dicoding.finego.RegisterRequest
 import com.dicoding.finego.RegisterResponse
 import com.dicoding.finego.TransactionRequest
@@ -13,7 +15,13 @@ import retrofit2.http.*
 interface ApiService {
 
     @POST("/auth/register")
-    fun register(@Body request: RegisterRequest): Call<RegisterResponse>
+    fun register(@Body request: RegisterRequest
+    ): Call<RegisterResponse>
+
+
+    @POST("/auth/login")
+    suspend fun login(@Body loginRequest: LoginRequest
+    ): Call<LoginResponse>
 
 
     @POST("/user/{id}/input-profile")

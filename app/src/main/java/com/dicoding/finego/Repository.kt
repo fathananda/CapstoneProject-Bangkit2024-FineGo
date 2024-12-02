@@ -43,4 +43,24 @@ class Repository(private val apiService: ApiService) {
 
         }
     }
+
+    suspend fun login(email: String, password: String): Result<LoginResponse> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.login(LoginRequest(email, password)).execute()
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        Result.Success(body)
+                    } else {
+                        Result.Error("Response body kosong")
+                    }
+                } else {
+                    Result.Error("Login gagal: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                Result.Error(e.localizedMessage ?: "Terjadi kesalahan saat login.")
+            }
+        }
+    }
 }

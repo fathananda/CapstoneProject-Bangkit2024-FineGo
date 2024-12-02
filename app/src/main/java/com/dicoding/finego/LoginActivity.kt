@@ -98,13 +98,41 @@ class LoginActivity : AppCompatActivity() {
                 binding.loading.visibility = View.GONE
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmail:success")
-                    updateUI(auth.currentUser)
+                    val firebaseUser = auth.currentUser
+                    firebaseUser?.let {
+                        // Login Firebase berhasil, lanjutkan login ke API
+                        lifecycleScope.launch {
+                            loginToApi(email, password)
+                        }
+                    }
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     Toast.makeText(this, "Login gagal: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
+
+
+    private suspend fun loginToApi(email: String, password: String) {
+        val repository = Repository(ApiClient.instance) // Pastikan ini diinisialisasi dengan benar
+        when (val result = repository.login(email, password)) {
+            is Result.Success -> {
+                Log.d(TAG, "Login API berhasil: ${result.data.token}")
+                binding.loading.visibility = View.GONE
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+            is Result.Error -> {
+                Log.e(TAG, "Login API gagal: ${result.message}")
+                binding.loading.visibility = View.GONE
+                Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
+            }
+            is Result.Loading -> {
+                binding.loading.visibility = View.VISIBLE
+            }
+        }
+    }
+
 
 
     private fun signIn() {
