@@ -2,22 +2,27 @@ package com.dicoding.finego
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.dicoding.finego.api.ApiClient
+import androidx.lifecycle.lifecycleScope
 import com.dicoding.finego.databinding.ActivityProfileBinding
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.auth.FirebaseAuth
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
 
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
+    private val profileViewModel: ProfileViewModel by viewModels {
+        ViewModelFactory(AppModule.provideProfileRepository())
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -25,7 +30,9 @@ class ProfileActivity : AppCompatActivity() {
 
         setEditMode(false)
 
-        getProfile()
+        observeProfile()
+        val userId = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
+        profileViewModel.fetchUserProfile(userId)
 
         binding.btnEdit.setOnClickListener{
             setEditMode(true)
@@ -36,7 +43,6 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.btnSimpan.setOnClickListener{
-            saveProfile()
             setEditMode(false)
 
             binding.btnEdit.visibility = View.VISIBLE
@@ -59,37 +65,39 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun getProfile() {
-        val auth = FirebaseAuth.getInstance()
-        val userId = auth.currentUser?.uid.toString()
-        ApiClient.instance.getUserProfile(userId)
-            .enqueue(object : Callback<UserProfileResponse> {
-                override fun onResponse(
-                    call: Call<UserProfileResponse>,
-                    response: Response<UserProfileResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val userProfile = response.body()?.data
-                        if (userProfile != null) {
-                            binding.etNama.setText(userProfile.name ?: "")
-                            binding.etTglLahir.setText(userProfile.birthDate ?: "")
-                            binding.etProvinsi.setText(userProfile.province ?: "")
-                            binding.etPenghasilan.setText(userProfile.income.toString() ?: "")
-                            binding.etEmail.setText(userProfile.email ?: "")
-                            binding.etTabungan.setText(userProfile.savings.toString() ?: "")
-                        } else {
-                            println("Profil kosong atau tidak ditemukan.")
-                        }
-                    } else {
-                        println("Gagal mendapatkan profil: ${response.errorBody()?.string()}")
+    private fun observeProfile() {
+        lifecycleScope.launch {
+            profileViewModel.profileState.collect { result ->
+                when (result) {
+                    is Result.Loading -> showLoading(true)
+                    is Result.Success -> {
+                        showLoading(false)
+                        populateProfile(result.data)
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(this@ProfileActivity, result.message, Toast.LENGTH_SHORT).show()
                     }
                 }
-
-                override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
-                    println("Error: ${t.localizedMessage}")
-                }
-            })
+            }
+        }
     }
+
+
+    private fun populateProfile(profile: Profile) {
+        binding.etNama.setText(profile.name)
+        binding.etTglLahir.setText(profile.birthDate)
+        binding.etProvinsi.setText(profile.province)
+        binding.etPenghasilan.setText(profile.income.toString())
+        binding.etEmail.setText(profile.email)
+        binding.etTabungan.setText(profile.savings.toString())
+    }
+
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
 
 
 
@@ -102,16 +110,6 @@ class ProfileActivity : AppCompatActivity() {
         binding.etTabungan.isEnabled = enabled
     }
 
-    private fun saveProfile() {
-        // Simpan data profil ke database atau server di sini
-        val nama = binding.etNama.text.toString()
-        val tglLahir = binding.etTglLahir.text.toString()
-        val email = binding.etEmail.text.toString()
-        val provinsi = binding.etProvinsi.text.toString()
-        val penghasilan = binding.etPenghasilan.text.toString()
-        val tabungan = binding.etTabungan.text.toString()
-
-    }
 
     private fun showMaterialDatePicker() {
         val calendar = Calendar.getInstance()

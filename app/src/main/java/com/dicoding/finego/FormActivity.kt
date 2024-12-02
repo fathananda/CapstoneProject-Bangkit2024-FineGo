@@ -2,6 +2,10 @@ package com.dicoding.finego
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +28,9 @@ class FormActivity : AppCompatActivity() {
         binding = ActivityFormBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        addTextWatchers()
+        addSpinnerListener()
+
         binding.etTglLahir.setOnClickListener {
             if (binding.etTglLahir.isEnabled) {
                 showMaterialDatePicker()
@@ -34,6 +41,63 @@ class FormActivity : AppCompatActivity() {
             submitUserProfile()
         }
 
+        updateSubmitButtonState()
+    }
+
+    private fun updateSubmitButtonState() {
+        binding.btnSubmit.isEnabled = validateInputs()
+    }
+
+    private fun validateInputs(): Boolean {
+        return binding.etNama.text.isNotBlank() &&
+                binding.etTglLahir.text.isNotBlank() &&
+                binding.etProvinsi.selectedItemPosition != 0 && // Pastikan bukan pilihan default
+                binding.etPenghasilan.text.isNotBlank() &&
+                binding.etTransportasi.text.isNotBlank() &&
+                binding.etSewa.text.isNotBlank() &&
+                binding.etListrik.text.isNotBlank() &&
+                binding.etAir.text.isNotBlank() &&
+                binding.etInternet.text.isNotBlank() &&
+                binding.etUtang.text.isNotBlank() &&
+                binding.etMakan.text.isNotBlank() &&
+                binding.etTabungan.text.isNotBlank() &&
+                binding.etEmail.text.isNotBlank()
+    }
+
+    private fun addTextWatchers() {
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateSubmitButtonState()
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        // Tambahkan TextWatcher ke setiap EditText
+        binding.etNama.addTextChangedListener(textWatcher)
+        binding.etTglLahir.addTextChangedListener(textWatcher)
+        binding.etPenghasilan.addTextChangedListener(textWatcher)
+        binding.etTransportasi.addTextChangedListener(textWatcher)
+        binding.etSewa.addTextChangedListener(textWatcher)
+        binding.etListrik.addTextChangedListener(textWatcher)
+        binding.etAir.addTextChangedListener(textWatcher)
+        binding.etInternet.addTextChangedListener(textWatcher)
+        binding.etUtang.addTextChangedListener(textWatcher)
+        binding.etMakan.addTextChangedListener(textWatcher)
+        binding.etTabungan.addTextChangedListener(textWatcher)
+        binding.etEmail.addTextChangedListener(textWatcher)
+    }
+
+    private fun addSpinnerListener() {
+        binding.etProvinsi.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updateSubmitButtonState()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
     private fun showMaterialDatePicker() {

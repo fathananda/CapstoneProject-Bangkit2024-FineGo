@@ -122,5 +122,18 @@
     <string name="penghasilan">Penghasilan</string>
     <string name="air_perbulan">Tagihan Air/Bulan</string>
     <string name="pilih_provinsi">Pilih Provinsi</string>
+    <string name="transaksi_kosong">Yuk, mulai mencatat pengeluaran dan pemasukanmu hari ini untuk mendapatkan gambaran yang lebih jelas mengenai keuanganmu</string>
+    <string name="detail_anggaran">DetailAnggaran</string>
+    <string-array name="kategori_pengeluaran">
+        <item>--Pilih Kategori--</item>
+        <item android:value="transportation_expenses">Transportasi</item>
+        <item android:value="food_expenses">Makan</item>
+        <item android:value="housing_cost">Tempat Tinggal</item>
+        <item android:value="electricity_bill">Listrik</item>
+        <item android:value="water_bill">Air</item>
+        <item android:value="debt">Hutang</item>
+        <item android:value="internet_bill">Internet</item>
+        <item android:value="other">Lainnya</item>
+    </string-array>
 
 </resources>

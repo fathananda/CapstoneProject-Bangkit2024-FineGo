@@ -107,8 +107,6 @@ class RegisterActivity : AppCompatActivity() {
                         val responseBody = response.body()
                         if (responseBody != null) {
                             Log.d("RegisterActivity", "API Success: ${responseBody.message}, UID: ${responseBody.uid}")
-                            saveUidToSharedPreferences(responseBody.uid)
-
                             Toast.makeText(
                                 this@RegisterActivity,
                                 "Registrasi berhasil. Silakan login.",
@@ -146,11 +144,4 @@ class RegisterActivity : AppCompatActivity() {
             })
     }
 
-    private fun saveUidToSharedPreferences(uid: String) {
-        val sharedPreferences = getSharedPreferences("FineGoPrefs", MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("user_uid", uid)
-        editor.apply()
-        Log.d("RegisterActivity", "UID berhasil disimpan: $uid")
-    }
 }

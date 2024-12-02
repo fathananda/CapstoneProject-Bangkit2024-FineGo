@@ -1,59 +1,121 @@
 package com.dicoding.finego
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.finego.api.ApiClient
+import com.dicoding.finego.databinding.FragmentTransactionTrackingBinding
+import com.google.firebase.auth.FirebaseAuth
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TransactionTrackingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TransactionTrackingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentTransactionTrackingBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var viewModel: TransactionViewModel
+    private lateinit var adapter: TransactionAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_transaction_tracking, container, false)
+    ): View {
+        _binding = FragmentTransactionTrackingBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TransactionTrackingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TransactionTrackingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupRecyclerView()
+        setupViewModel()
+        observeTransactions()
+        fetchTransactions()
+
+
+
+        binding.btnPemasukan.setOnClickListener {
+            val intent = Intent(requireContext(), PemasukanActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnPengeluaran.setOnClickListener {
+            val intent = Intent(requireContext(), PengeluaranActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchTransactions()
+    }
+
+
+
+
+    private fun setupRecyclerView() {
+        adapter = TransactionAdapter()
+        binding.rvTransaction.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTransaction.adapter = adapter
+    }
+
+    private fun setupViewModel() {
+        val factory = ViewModelFactory(Repository(ApiClient.instance))
+        viewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
+    }
+
+    private fun observeTransactions() {
+        viewModel.transactions.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.llTransactionTracking.visibility = View.GONE
+                }
+                is Result.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.llTransactionTracking.visibility = View.VISIBLE
+                    val transactions = result.data.data.flatMap { it.transactions }
+                    if (transactions.isEmpty()) {
+                        binding.rvTransaction.visibility = View.GONE
+                        binding.llTransaksiKosong.visibility = View.VISIBLE
+                    } else {
+                        binding.rvTransaction.visibility = View.VISIBLE
+                        binding.llTransaksiKosong.visibility = View.GONE
+                        adapter.submitList(transactions)
+                    }
+                }
+                is Result.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.llTransactionTracking.visibility = View.VISIBLE
+                    binding.rvTransaction.visibility = View.GONE
+                    binding.llTransaksiKosong.visibility = View.VISIBLE
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
                 }
             }
+        }
     }
+
+    private fun fetchTransactions() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            viewModel.fetchTransactions(userId)
+        } else {
+            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
 }
