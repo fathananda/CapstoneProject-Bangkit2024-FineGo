@@ -43,7 +43,6 @@ class PengeluaranActivity : AppCompatActivity() {
 
         binding.etNominal.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
-                // Tidak perlu diubah
             }
 
             override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
@@ -51,14 +50,11 @@ class PengeluaranActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(editable: Editable?) {
-                // Tidak perlu diubah
             }
         })
 
-// Set listener untuk perubahan teks di etCatatan
         binding.etCatatan.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
-                // Tidak perlu diubah
             }
 
             override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
@@ -66,7 +62,6 @@ class PengeluaranActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(editable: Editable?) {
-                // Tidak perlu diubah
             }
         })
 
@@ -105,7 +100,7 @@ class PengeluaranActivity : AppCompatActivity() {
             "Hutang" -> "debt"
             "Internet" -> "internet_bill"
             "Lainnya" -> "other"
-            else -> "other" // Default jika tidak ditemukan
+            else -> "other"
         }
     }
 
@@ -149,34 +144,28 @@ class PengeluaranActivity : AppCompatActivity() {
     private fun showMaterialDatePicker() {
         val calendar = Calendar.getInstance()
 
-        // Batas maksimal (hari ini)
         val maxDate = calendar.timeInMillis
 
-        // Batas minimal (opsional: 100 tahun ke belakang)
         calendar.add(Calendar.YEAR, -100)
         val minDate = calendar.timeInMillis
 
-        // Atur Constraint
         val constraintsBuilder = CalendarConstraints.Builder()
-            .setValidator(DateValidatorPointBackward.before(maxDate)) // Tidak bisa pilih masa depan
-            .setStart(minDate) // Mulai dari 100 tahun lalu
-            .setEnd(maxDate) // Hingga hari ini
+            .setValidator(DateValidatorPointBackward.before(maxDate))
+            .setStart(minDate)
+            .setEnd(maxDate)
 
-        // Atur builder DatePicker
         val builder = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Pilih Tanggal Lahir")
-            .setSelection(maxDate) // Default tanggal hari ini
-            .setCalendarConstraints(constraintsBuilder.build()) // Tambahkan batas
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR) // Tampilkan langsung kalender
+            .setSelection(maxDate)
+            .setCalendarConstraints(constraintsBuilder.build())
+            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
 
         val datePicker = builder.build()
 
-        // Handle tanggal yang dipilih
         datePicker.addOnPositiveButtonClickListener { selection ->
             val selectedDate = Calendar.getInstance()
             selectedDate.timeInMillis = selection
 
-            // Format tanggal
             val formattedDate = String.format(
                 Locale.getDefault(),
                 "%02d/%02d/%d",
@@ -185,11 +174,9 @@ class PengeluaranActivity : AppCompatActivity() {
                 selectedDate.get(Calendar.YEAR)
             )
 
-            // Set tanggal ke EditText
             binding.etTanggal.setText(formattedDate)
         }
 
-        // Tampilkan dialog DatePicker
         if (!datePicker.isAdded) {
             datePicker.show(supportFragmentManager, "DATE_PICKER")
         }

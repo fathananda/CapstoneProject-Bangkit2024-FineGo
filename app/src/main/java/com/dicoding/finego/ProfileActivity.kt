@@ -88,9 +88,7 @@ class ProfileActivity : AppCompatActivity() {
         binding.etNama.setText(profile.name)
         binding.etTglLahir.setText(profile.birthDate)
         binding.etProvinsi.setText(profile.province)
-        binding.etPenghasilan.setText(profile.income.toString())
         binding.etEmail.setText(profile.email)
-        binding.etTabungan.setText(profile.savings.toString())
     }
 
 
@@ -106,8 +104,6 @@ class ProfileActivity : AppCompatActivity() {
         binding.etTglLahir.isEnabled = enabled
         binding.etEmail.isEnabled = enabled
         binding.etProvinsi.isEnabled = enabled
-        binding.etPenghasilan.isEnabled = enabled
-        binding.etTabungan.isEnabled = enabled
     }
 
 

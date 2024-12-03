@@ -6,12 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.finego.api.ApiClient
 import com.dicoding.finego.databinding.FragmentTransactionTrackingBinding
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 
 class TransactionTrackingFragment : Fragment() {
@@ -19,6 +23,9 @@ class TransactionTrackingFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: TransactionViewModel
     private lateinit var adapter: TransactionAdapter
+    private val profileViewModel: ProfileViewModel by viewModels {
+        ViewModelFactory(AppModule.provideProfileRepository())
+    }
 
 
     override fun onCreateView(
@@ -100,12 +107,30 @@ class TransactionTrackingFragment : Fragment() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            profileViewModel.profileState.collect { result ->
+                when (result) {
+                    is Result.Loading -> binding.progressBar.visibility = View.VISIBLE
+
+                    is Result.Success -> {
+                        binding.tvUsername.text = result.data.name
+                    }
+                    is Result.Error -> {
+
+                    }
+                }
+            }
+        }
     }
+
+
 
     private fun fetchTransactions() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
         if (userId != null) {
             viewModel.fetchTransactions(userId)
+            profileViewModel.fetchUserProfile(userId)
         } else {
             Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
         }

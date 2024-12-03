@@ -2,7 +2,6 @@ package com.dicoding.finego
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -26,6 +25,8 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        supportActionBar?.hide()
+
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -47,16 +48,18 @@ class RegisterActivity : AppCompatActivity() {
     private fun setupPasswordVisibilityToggle() {
         binding.imgTogglePassword.setOnClickListener {
             isPasswordVisible = !isPasswordVisible
+            val selection = binding.edtPassword.selectionStart
             if (isPasswordVisible) {
-                binding.edtPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                binding.edtPassword.transformationMethod = null
                 binding.imgTogglePassword.setImageResource(R.drawable.ic_visibility_on) // Icon mata terbuka
             } else {
-                binding.edtPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.edtPassword.transformationMethod = android.text.method.PasswordTransformationMethod.getInstance()
                 binding.imgTogglePassword.setImageResource(R.drawable.ic_visibility_off) // Icon mata tertutup
             }
-            binding.edtPassword.setSelection(binding.edtPassword.text!!.length)
+            binding.edtPassword.setSelection(selection)
         }
     }
+
 
 
 
@@ -126,7 +129,7 @@ class RegisterActivity : AppCompatActivity() {
                         Log.e("RegisterActivity", "API response error: ${response.errorBody()?.string()}")
                         Toast.makeText(
                             this@RegisterActivity,
-                            "Registrasi gagal di server.",
+                            "${response.errorBody()?.string()}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }

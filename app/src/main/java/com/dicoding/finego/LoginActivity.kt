@@ -3,7 +3,6 @@ package com.dicoding.finego
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
-import android.text.InputType
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -43,6 +42,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        supportActionBar?.hide()
 
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -70,16 +70,22 @@ class LoginActivity : AppCompatActivity() {
     private fun setupPasswordVisibilityToggle() {
         binding.imgTogglePassword.setOnClickListener {
             isPasswordVisible = !isPasswordVisible
+            val selection = binding.edtPassword.selectionStart
             if (isPasswordVisible) {
-                binding.edtPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                // Tampilkan password
+                binding.edtPassword.transformationMethod = null
                 binding.imgTogglePassword.setImageResource(R.drawable.ic_visibility_on) // Icon mata terbuka
             } else {
-                binding.edtPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                // Sembunyikan password
+                binding.edtPassword.transformationMethod = android.text.method.PasswordTransformationMethod.getInstance()
                 binding.imgTogglePassword.setImageResource(R.drawable.ic_visibility_off) // Icon mata tertutup
             }
-            binding.edtPassword.setSelection(binding.edtPassword.text!!.length)
+            // Reset posisi kursor
+            binding.edtPassword.setSelection(selection)
         }
     }
+
+
 
 
     private fun loginWithEmailPassword() {
@@ -100,7 +106,6 @@ class LoginActivity : AppCompatActivity() {
                     Log.d(TAG, "signInWithEmail:success")
                     val firebaseUser = auth.currentUser
                     firebaseUser?.let {
-                        // Login Firebase berhasil, lanjutkan login ke API
                         lifecycleScope.launch {
                             loginToApi(email, password)
                         }
@@ -114,7 +119,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     private suspend fun loginToApi(email: String, password: String) {
-        val repository = Repository(ApiClient.instance) // Pastikan ini diinisialisasi dengan benar
+        val repository = Repository(ApiClient.instance)
         when (val result = repository.login(email, password)) {
             is Result.Success -> {
                 Log.d(TAG, "Login API berhasil: ${result.data.token}")
@@ -204,26 +209,22 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkDataProfile(userId: String) {
-        ApiClient.instance.getUserProfile(userId)
-            .enqueue(object : Callback<UserProfileResponse> {
-                override fun onResponse(
-                    call: Call<UserProfileResponse>,
-                    response: Response<UserProfileResponse>
-                ) {
-                    if (response.isSuccessful && response.body() != null) {
-                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                        finish()
-                    } else {
-                        startActivity(Intent(this@LoginActivity, FormActivity::class.java))
-                        finish()
-                    }
+        lifecycleScope.launch {
+            try {
+                val response = ApiClient.instance.getUserProfile(userId)
+                if (response.isSuccessful && response.body() != null) {
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    finish()
+                } else {
+                    startActivity(Intent(this@LoginActivity, FormActivity::class.java))
+                    finish()
                 }
-
-                override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
-                    Toast.makeText(this@LoginActivity, "Gagal memeriksa profil: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
-                }
-            })
+            } catch (e: Exception) {
+                Toast.makeText(this@LoginActivity, "Gagal memeriksa profil: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
 
 
     override fun onStart() {

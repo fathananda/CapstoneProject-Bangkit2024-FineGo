@@ -9,22 +9,30 @@ class Repository(private val apiService: ApiService) {
     suspend fun getUserProfile(userId: String): Result<Profile> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.getUserProfile(userId).execute()
+                val response = apiService.getUserProfile(userId)
                 if (response.isSuccessful) {
-                    val profile = response.body()?.data
-                    if (profile != null) {
-                        Result.Success(profile)
+                    val profileData = response.body()?.data?.profileData
+                    if (profileData != null) {
+                        Result.Success(
+                            Profile(
+                                name = profileData.name,
+                                email = profileData.email,
+                                birthDate = profileData.birthDate,
+                                province = profileData.province
+                            )
+                        )
                     } else {
                         Result.Error("Data profil tidak ditemukan.")
                     }
                 } else {
-                    Result.Error("Gagal memuat profil: ${response.errorBody()?.string()}")
+                    Result.Error("Gagal memuat profil: ${response.message()}")
                 }
             } catch (e: Exception) {
                 Result.Error(e.localizedMessage ?: "Terjadi kesalahan.")
             }
         }
     }
+
 
 
     suspend fun getTransactions(userId: String): Result<TransactionResponse> {
@@ -45,22 +53,21 @@ class Repository(private val apiService: ApiService) {
     }
 
     suspend fun login(email: String, password: String): Result<LoginResponse> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = apiService.login(LoginRequest(email, password)).execute()
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    if (body != null) {
-                        Result.Success(body)
-                    } else {
-                        Result.Error("Response body kosong")
-                    }
+        return try {
+            val response = apiService.login(LoginRequest(email, password))
+            if (response.isSuccessful) {
+                val responseBody = response.body()
+                if (responseBody != null) {
+                    Result.Success(responseBody)
                 } else {
-                    Result.Error("Login gagal: ${response.message()}")
+                    Result.Error("Login berhasil, tetapi token tidak ditemukan.")
                 }
-            } catch (e: Exception) {
-                Result.Error(e.localizedMessage ?: "Terjadi kesalahan saat login.")
+            } else {
+                Result.Error("Login gagal: ${response.message()}")
             }
+        } catch (e: Exception) {
+            Result.Error("Terjadi kesalahan: ${e.localizedMessage}")
         }
     }
+
 }

@@ -71,6 +71,8 @@
             android:inputType="none"
             android:textSize="16sp"
             android:enabled="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             app:layout_constraintWidth_max="488dp"
             android:background="@android:color/white"
             app:layout_constraintTop_toBottomOf="@id/tv_tgl_lahir"
@@ -133,60 +135,8 @@
             android:padding="8dp" />
 
 
-        <TextView
-            android:id="@+id/tv_penghasilan"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
-            android:text="@string/penghasilan"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_provinsi" />
-
-        <EditText
-            android:id="@+id/et_penghasilan"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:hint="@string/penghasilan"
-            android:inputType="textLongMessage"
-            app:layout_constraintWidth_max="488dp"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:background="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/tv_penghasilan"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:padding="8dp" />
 
 
-        <TextView
-            android:id="@+id/tv_tabungan"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
-            android:text="@string/tabungan"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_penghasilan" />
-
-        <EditText
-            android:id="@+id/et_tabungan"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:hint="@string/tabungan"
-            android:inputType="numberDecimal"
-            app:layout_constraintWidth_max="488dp"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:background="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@id/tv_tabungan"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:padding="8dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_edit"
@@ -198,7 +148,7 @@
             android:visibility="visible"
             android:textSize="16sp"
             android:backgroundTint="@android:color/black"
-            app:layout_constraintTop_toBottomOf="@id/et_tabungan"
+            app:layout_constraintTop_toBottomOf="@id/et_provinsi"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:padding="15dp" />
@@ -213,7 +163,7 @@
             android:textSize="16sp"
             android:textColor="@color/white"
             android:backgroundTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/et_tabungan"
+            app:layout_constraintTop_toBottomOf="@id/et_provinsi"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_batal"
             app:layout_constraintWidth_percent="0.45"
@@ -229,7 +179,7 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:backgroundTint="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/et_tabungan"
+            app:layout_constraintTop_toBottomOf="@id/et_provinsi"
             app:layout_constraintStart_toEndOf="@id/btn_simpan"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintWidth_percent="0.45"

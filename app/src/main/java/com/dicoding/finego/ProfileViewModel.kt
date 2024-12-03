@@ -13,7 +13,8 @@ class ProfileViewModel(private val repository: Repository) : ViewModel() {
     fun fetchUserProfile(userId: String) {
         viewModelScope.launch {
             _profileState.value = Result.Loading
-            _profileState.value = repository.getUserProfile(userId)
+            val result = repository.getUserProfile(userId)
+            _profileState.value = result
         }
     }
 }

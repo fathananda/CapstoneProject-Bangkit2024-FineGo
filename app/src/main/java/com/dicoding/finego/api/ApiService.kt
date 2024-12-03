@@ -21,7 +21,7 @@ interface ApiService {
 
     @POST("/auth/login")
     suspend fun login(@Body loginRequest: LoginRequest
-    ): Call<LoginResponse>
+    ): Response<LoginResponse>
 
 
     @POST("/user/{id}/input-profile")
@@ -32,9 +32,9 @@ interface ApiService {
 
 
     @GET("/user/{id}/profile")
-    fun getUserProfile(
+    suspend fun getUserProfile(
         @Path("id") userId: String
-    ): Call<UserProfileResponse>
+    ): Response<UserProfileResponse>
 
 
     @POST("/user/{id}/transactions")

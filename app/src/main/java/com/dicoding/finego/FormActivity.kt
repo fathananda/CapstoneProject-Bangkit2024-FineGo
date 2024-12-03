@@ -7,7 +7,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.finego.api.ApiClient
 import com.dicoding.finego.databinding.ActivityFormBinding
@@ -33,11 +32,19 @@ class FormActivity : AppCompatActivity() {
 
         binding.etTglLahir.setOnClickListener {
             if (binding.etTglLahir.isEnabled) {
+
                 showMaterialDatePicker()
             }
         }
 
         binding.btnSubmit.setOnClickListener {
+            if (!validateInputs()) {
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(binding.etEmail.text.toString()).matches()) {
+                    binding.etEmail.error = "Masukkan email dengan format yang benar"
+                }
+                Toast.makeText(this, "Formulir belum lengkap atau email tidak valid", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             submitUserProfile()
         }
 
@@ -49,9 +56,10 @@ class FormActivity : AppCompatActivity() {
     }
 
     private fun validateInputs(): Boolean {
+
         return binding.etNama.text.isNotBlank() &&
                 binding.etTglLahir.text.isNotBlank() &&
-                binding.etProvinsi.selectedItemPosition != 0 && // Pastikan bukan pilihan default
+                binding.etProvinsi.selectedItemPosition != 0 &&
                 binding.etPenghasilan.text.isNotBlank() &&
                 binding.etTransportasi.text.isNotBlank() &&
                 binding.etSewa.text.isNotBlank() &&
@@ -61,7 +69,9 @@ class FormActivity : AppCompatActivity() {
                 binding.etUtang.text.isNotBlank() &&
                 binding.etMakan.text.isNotBlank() &&
                 binding.etTabungan.text.isNotBlank() &&
-                binding.etEmail.text.isNotBlank()
+                binding.etEmail.text.isNotBlank() &&
+                android.util.Patterns.EMAIL_ADDRESS.matcher(binding.etEmail.text.toString()).matches()
+
     }
 
     private fun addTextWatchers() {
@@ -75,7 +85,6 @@ class FormActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         }
 
-        // Tambahkan TextWatcher ke setiap EditText
         binding.etNama.addTextChangedListener(textWatcher)
         binding.etTglLahir.addTextChangedListener(textWatcher)
         binding.etPenghasilan.addTextChangedListener(textWatcher)
@@ -87,7 +96,21 @@ class FormActivity : AppCompatActivity() {
         binding.etUtang.addTextChangedListener(textWatcher)
         binding.etMakan.addTextChangedListener(textWatcher)
         binding.etTabungan.addTextChangedListener(textWatcher)
-        binding.etEmail.addTextChangedListener(textWatcher)
+        binding.etEmail.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val email = s.toString()
+                if (email.isNotBlank() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    binding.etEmail.error = "Format email tidak valid"
+                } else {
+                    binding.etEmail.error = null
+                }
+                updateSubmitButtonState()
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     private fun addSpinnerListener() {
@@ -171,21 +194,24 @@ class FormActivity : AppCompatActivity() {
             email = email,
             birthDate = tglLahir,
             province = provinsi,
-            income = penghasilan.toInt(),
-            savings = tabungan.toInt()
         )
 
         val expense = Expense(
-            foodExpenses = makan.toInt(),
-            transportationExpenses = transportasi.toInt(),
-            housingCost = sewa.toInt(),
-            electricityBill = listrik.toInt(),
-            waterBill = air.toInt(),
-            internetCost = internet.toInt(),
+            food_expenses = makan.toInt(),
+            transportation_expenses = transportasi.toInt(),
+            housing_cost = sewa.toInt(),
+            electricity_bill = listrik.toInt(),
+            water_bill = air.toInt(),
+            internet_cost = internet.toInt(),
             debt = utang.toInt()
         )
 
-        val userInputRequest = UserInputRequest(profile, expense)
+        val income = Income(
+            total_income = penghasilan.toInt(),
+            savings = tabungan.toInt()
+        )
+
+        val userInputRequest = UserInputRequest(profile, expense, income)
 
         val auth = FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid
@@ -196,7 +222,6 @@ class FormActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         println("Profil berhasil disimpan")
                         Toast.makeText(this@FormActivity, "Profil berhasil disimpan", Toast.LENGTH_SHORT).show()
-                        // Arahkan ke MainActivity setelah sukses
                         startActivity(Intent(this@FormActivity, MainActivity::class.java))
                         finish()
                     } else {

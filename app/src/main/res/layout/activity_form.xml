@@ -26,7 +26,6 @@
             android:layout_marginBottom="16dp"
             />
 
-        <!-- Nama -->
         <EditText
             android:id="@+id/et_nama"
             android:layout_width="0dp"
@@ -52,15 +51,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Usia -->
         <EditText
             android:id="@+id/et_tgl_lahir"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/tgl_lahir"
-            android:inputType="number"
+            android:inputType="none"
             android:background="@android:drawable/edit_text"
             android:padding="12dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             app:layout_constraintTop_toBottomOf="@id/et_email"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +81,6 @@
             />
 
 
-        <!-- Penghasilan/Bulan -->
         <EditText
             android:id="@+id/et_penghasilan"
             android:layout_width="0dp"
@@ -95,7 +94,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             />
 
-        <!-- Transportasi/Bulan -->
         <EditText
             android:id="@+id/et_transportasi"
             android:layout_width="0dp"
@@ -109,7 +107,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             />
 
-        <!-- Biaya Sewa/Bulan -->
         <EditText
             android:id="@+id/et_sewa"
             android:layout_width="0dp"
@@ -123,7 +120,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             />
 
-        <!-- Listrik/Bulan -->
         <EditText
             android:id="@+id/et_listrik"
             android:layout_width="0dp"

@@ -3,5 +3,9 @@ package com.dicoding.finego
 
 data class UserProfileResponse(
     val status: String,
-    val data: Profile
+    val data: ProfileDataResponse
+)
+
+data class ProfileDataResponse(
+    val profileData: Profile
 )
