@@ -81,13 +81,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun signOut() {
-        lifecycleScope.launch {
-            val credentialManager = CredentialManager.create(this@MainActivity)
-            auth.signOut()
-            credentialManager.clearCredentialState(ClearCredentialStateRequest())
-            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-            finish()
+        val alertDialog = androidx.appcompat.app.AlertDialog.Builder(this)
+        alertDialog.setTitle("Logout")
+        alertDialog.setMessage("Apakah Anda yakin ingin logout?")
+        alertDialog.setPositiveButton("Ya") { _, _ ->
+            lifecycleScope.launch {
+                val credentialManager = CredentialManager.create(this@MainActivity)
+                auth.signOut()
+                credentialManager.clearCredentialState(ClearCredentialStateRequest())
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                finish()
+            }
         }
+        alertDialog.setNegativeButton("Tidak") { dialog, _ ->
+            dialog.dismiss()
+        }
+        alertDialog.show()
     }
 
     private val navController by lazy {

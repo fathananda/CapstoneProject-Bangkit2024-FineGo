@@ -5,55 +5,71 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.finego.databinding.FragmentBudgetPlanningBinding
+import com.google.firebase.auth.FirebaseAuth
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [BudgetPlanningFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class BudgetPlanningFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentBudgetPlanningBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var viewModel: BudgetPlanningViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_budget_planning, container, false)
+    ): View {
+        _binding = FragmentBudgetPlanningBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BudgetPlanningFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BudgetPlanningFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val factory = ViewModelFactory(AppModule.provideProfileRepository())
+        viewModel = ViewModelProvider(this, factory)[BudgetPlanningViewModel::class.java]
+
+        val userId = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
+        viewModel.fetchBudgetPlan(userId)
+
+        setupObserver()
+    }
+
+    private fun setupObserver() {
+        viewModel.budgetPlan.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                is Result.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    val data = result.data.recommendations
+                    val totalBudget = data.budget_plan.debt + data.budget_plan.water_bill + data.budget_plan.electricity_bill + data.budget_plan.housing_cost +  data.budget_plan.internet_cost + data.budget_plan.food_expenses + data.budget_plan.transportation_expenses
+                    binding.monthlyLimit.text = "Rp. ${data.monthly_limit.toInt()}"
+                    binding.progressBarBatasBulanan.max = data.monthly_limit.toInt()
+                    binding.progressBarBatasBulanan.progress = totalBudget
+
+                    val savingsRate = data.savings_rate.toFloat().toInt()
+                    binding.circularProgress.progress = savingsRate
+                    binding.centerProgressText.text = "$savingsRate%"
+
+                    binding.rvBudgetPlanning.apply {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = BudgetPlanAdapter(data.budget_plan)
+                    }
+                }
+                is Result.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(context, "Error: ${result.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -35,6 +35,42 @@
             />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_highest_income"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pengeluaran_tertinggi"
+        android:layout_marginTop="15dp"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        app:layout_constraintTop_toBottomOf="@id/ll_label_keuangan"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_highest_expenses"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_highest_income"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/item_expense" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:indeterminateTint="@color/white"
+        />
+
 
 
 

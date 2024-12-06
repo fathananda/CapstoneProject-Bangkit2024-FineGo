@@ -113,7 +113,7 @@
     <string name="makan">Makan/Bulan</string>
     <string name="tabungan">Tabungan</string>
     <string name="rasio_tabungan">Rasio Tabungan</string>
-    <string name="tabungan_berhasil">Hebat! Anda berhasil menyisihkan gaji bulan ini.</string>
+    <string name="tabungan_berhasil">Saran menabung untuk kamu di bulan ini. Semangat!.</string>
     <string name="nol_persen">0%</string>
     <string name="tgl_lahir">Tanggal Lahir</string>
     <string name="edit_profil">Edit Profil</string>
@@ -135,5 +135,11 @@
         <item android:value="internet_bill">Internet</item>
         <item android:value="other">Lainnya</item>
     </string-array>
+    <string name="label_keuangan">Keuangan %1$s</string>
+    <string name="amount_expense">Rp. %1$s</string>
+    <string name="item_name">Item Name</string>
+    <string name="pengeluaran_tertinggi">Pengeluaran Tertinggi :</string>
+    <string name="desember_2024">Desember 2024</string>
+
 
 </resources>

@@ -14,7 +14,7 @@
         android:id="@+id/ll_transaction_tracking"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="vertical">
 
 
@@ -219,6 +219,7 @@
             android:id="@+id/rv_transaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:listitem="@layout/item_list_transaction" />
 
         <LinearLayout
@@ -227,7 +228,8 @@
             android:layout_height="150dp"
             android:orientation="vertical"
             android:gravity="center"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:padding="20dp"
             android:background="@drawable/bg_rounded_corner"
             android:layout_marginTop="16dp">
 

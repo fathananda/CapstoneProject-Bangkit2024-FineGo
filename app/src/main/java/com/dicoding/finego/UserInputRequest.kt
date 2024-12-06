@@ -2,18 +2,18 @@ package com.dicoding.finego
 
 data class UserInputRequest(
     val profile: Profile,
-    val expense: Expense,
+    val expenses: Expenses,
     val income: Income
 )
 
 data class Profile(
     val name: String,
     val email: String,
-    val birthDate: String,  // Format: "YYYY-MM-DD"
+    val birthdate: String,  // Format: "YYYY-MM-DD"
     val province: String,
 )
 
-data class Expense(
+data class Expenses(
     val food_expenses: Int,
     val transportation_expenses: Int,
     val housing_cost: Int,

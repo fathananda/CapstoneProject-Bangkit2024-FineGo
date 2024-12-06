@@ -115,6 +115,7 @@ class RegisterActivity : AppCompatActivity() {
                                 "Registrasi berhasil. Silakan login.",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            FirebaseAuth.getInstance().signOut()
                             startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                             finish()
                         } else {

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -89,6 +88,12 @@ class TransactionTrackingFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
                     binding.llTransactionTracking.visibility = View.VISIBLE
                     val transactions = result.data.data.flatMap { it.transactions }
+                    val totalIncome = transactions.filter { it.type == "income" }.sumOf { it.amount }
+                    val totalExpense = transactions.filter { it.type == "expense" }.sumOf { it.amount }
+
+                    binding.tvTotalPemasukan.text = "Rp. $totalIncome"
+                    binding.tvTotalPengeluaran.text = "Rp. $totalExpense"
+                    binding.tvSaldoNominal.text = "Rp. ${totalIncome - totalExpense}"
                     if (transactions.isEmpty()) {
                         binding.rvTransaction.visibility = View.GONE
                         binding.llTransaksiKosong.visibility = View.VISIBLE

@@ -86,7 +86,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun populateProfile(profile: Profile) {
         binding.etNama.setText(profile.name)
-        binding.etTglLahir.setText(profile.birthDate)
+        binding.etTglLahir.setText(profile.birthdate)
         binding.etProvinsi.setText(profile.province)
         binding.etEmail.setText(profile.email)
     }

@@ -17,7 +17,7 @@ class Repository(private val apiService: ApiService) {
                             Profile(
                                 name = profileData.name,
                                 email = profileData.email,
-                                birthDate = profileData.birthDate,
+                                birthdate = profileData.birthdate,
                                 province = profileData.province
                             )
                         )
@@ -69,5 +69,46 @@ class Repository(private val apiService: ApiService) {
             Result.Error("Terjadi kesalahan: ${e.localizedMessage}")
         }
     }
+
+
+    suspend fun getMonthlyReport(userId: String): Result<MonthlyReportResponse> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getMonthlyReport(userId)
+                if (response.isSuccessful) {
+                    val financeReport = response.body()
+                    if (financeReport != null) {
+                        Result.Success(financeReport)
+                    } else {
+                        Result.Error("Data laporan keuangan tidak ditemukan.")
+                    }
+                } else {
+                    Result.Error("Gagal memuat laporan keuangan: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                Result.Error(e.localizedMessage ?: "Terjadi kesalahan.")
+            }
+        }
+    }
+
+
+
+
+
+    suspend fun getBudgetPlan(userId: String): Result<BudgetPlanResponse> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getBudgetPlan(userId)
+                if (response.isSuccessful) {
+                    Result.Success(response.body()!!)
+                } else {
+                    Result.Error(response.message())
+                }
+            } catch (e: Exception) {
+                Result.Error("Terjadi kesalahan: ${e.localizedMessage}")
+            }
+        }
+    }
+
 
 }

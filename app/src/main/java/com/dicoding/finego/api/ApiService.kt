@@ -1,7 +1,9 @@
 package com.dicoding.finego.api
 
+import com.dicoding.finego.BudgetPlanResponse
 import com.dicoding.finego.LoginRequest
 import com.dicoding.finego.LoginResponse
+import com.dicoding.finego.MonthlyReportResponse
 import com.dicoding.finego.RegisterRequest
 import com.dicoding.finego.RegisterResponse
 import com.dicoding.finego.TransactionRequest
@@ -47,4 +49,12 @@ interface ApiService {
     suspend fun getTransactions(
         @Path("id") userId: String
     ): Response<TransactionResponse>
+
+    @GET("/user/{id}/monthly-report")
+    suspend fun getMonthlyReport(@Path("id") userId: String
+    ): Response<MonthlyReportResponse>
+
+    @GET("/user/{id}/budget-plan")
+    suspend fun getBudgetPlan(@Path("id") userId: String
+    ): Response<BudgetPlanResponse>
 }

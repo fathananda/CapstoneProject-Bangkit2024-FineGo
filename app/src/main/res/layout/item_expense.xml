@@ -4,34 +4,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="4dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:backgroundTint="@color/white">
+        android:padding="8dp">
 
         <TextView
-            android:id="@+id/tv_item_name"
+            android:id="@+id/tv_category"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/black"
-            android:text="@string/item_name"
-            android:textSize="16sp" />
+            android:text="@string/kategori"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
 
         <TextView
-            android:id="@+id/tv_item_amount"
+            android:id="@+id/tv_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/rp_1_000_000"
             android:textSize="16sp"
-            android:textColor="@android:color/holo_green_dark"/>
-
+            android:textColor="@android:color/holo_green_dark" />
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>
+

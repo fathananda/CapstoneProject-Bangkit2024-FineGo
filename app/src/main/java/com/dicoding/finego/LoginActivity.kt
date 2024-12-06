@@ -24,10 +24,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.withContext
 
 
 class LoginActivity : AppCompatActivity() {
@@ -211,16 +210,22 @@ class LoginActivity : AppCompatActivity() {
     private fun checkDataProfile(userId: String) {
         lifecycleScope.launch {
             try {
-                val response = ApiClient.instance.getUserProfile(userId)
+                Log.d(TAG, "Memulai permintaan ke API untuk userId: $userId")
+                val response = withContext(Dispatchers.IO) {
+                    ApiClient.instance.getUserProfile(userId)
+
+                }
                 if (response.isSuccessful && response.body() != null) {
+                    Log.d(TAG, "Profil ditemukan: ${response.body()}")
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     finish()
                 } else {
+                    Log.e(TAG, "API gagal: ${response.code()} - ${response.message()}")
                     startActivity(Intent(this@LoginActivity, FormActivity::class.java))
                     finish()
                 }
             } catch (e: Exception) {
-                Toast.makeText(this@LoginActivity, "Gagal memeriksa profil: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Gagal memeriksa profil: ${e.localizedMessage}")
             }
         }
     }

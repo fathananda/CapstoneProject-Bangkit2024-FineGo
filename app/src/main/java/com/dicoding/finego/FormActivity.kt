@@ -192,11 +192,11 @@ class FormActivity : AppCompatActivity() {
         val profile = Profile(
             name = nama,
             email = email,
-            birthDate = tglLahir,
+            birthdate = tglLahir,
             province = provinsi,
         )
 
-        val expense = Expense(
+        val expenses = Expenses(
             food_expenses = makan.toInt(),
             transportation_expenses = transportasi.toInt(),
             housing_cost = sewa.toInt(),
@@ -211,7 +211,7 @@ class FormActivity : AppCompatActivity() {
             savings = tabungan.toInt()
         )
 
-        val userInputRequest = UserInputRequest(profile, expense, income)
+        val userInputRequest = UserInputRequest(profile, expenses, income)
 
         val auth = FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid

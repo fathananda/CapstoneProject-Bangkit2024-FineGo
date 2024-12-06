@@ -16,8 +16,27 @@ class TransactionAdapter : RecyclerView.Adapter<TransactionAdapter.ViewHolder>()
 
     inner class ViewHolder(private val binding: ItemListTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        private fun getCategoryInIndonesian(category: String): String {
+            return when (category) {
+                "water_bill" -> "Air"
+                "electricity_bill" -> "Listrik"
+                "food_expenses" -> "Makan"
+                "internet_bill" -> "Internet"
+                "housing_cost" -> "Tempat Tinggal"
+                "transportation_expenses" -> "Transportasi"
+                "debt" -> "Hutang"
+                "other" -> "Lainnya"
+                else -> category // Default: gunakan nama asli
+            }
+        }
+
         fun bind(transaction: Transaction) {
-            binding.tvSumberPemasukan.text = transaction.category
+            val categoryText = if (transaction.type == "expense") {
+                getCategoryInIndonesian(transaction.category)
+            } else {
+                transaction.category
+            }
+            binding.tvSumberPemasukan.text = categoryText
             binding.tvNominal.text = "Rp ${transaction.amount}"
             binding.tvCatatan.text = transaction.note
             binding.tvTanggal.text = transaction.date
