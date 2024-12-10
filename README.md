@@ -4,4 +4,4 @@
 
 ## Tech Stack
 * Kotlin
-* 
+* Android Studio
