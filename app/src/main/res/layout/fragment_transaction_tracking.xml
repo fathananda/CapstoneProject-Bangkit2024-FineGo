@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     android:padding="16dp"
     android:background="@color/green"
-    tools:context=".TransactionTrackingFragment">
+    tools:context=".features.transactiontracking.TransactionTrackingFragment">
 
     <LinearLayout
         android:id="@+id/ll_transaction_tracking"

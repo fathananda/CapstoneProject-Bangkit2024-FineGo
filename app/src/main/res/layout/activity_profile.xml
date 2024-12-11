@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#E8F5E9"
     android:fitsSystemWindows="true"
-    tools:context=".ProfileActivity">
+    tools:context=".features.profile.ProfileActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

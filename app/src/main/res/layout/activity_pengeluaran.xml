@@ -8,7 +8,7 @@
     android:backgroundTint="@color/green"
     android:fitsSystemWindows="true"
     android:background="@color/white"
-    tools:context=".PengeluaranActivity">
+    tools:context=".features.form.PengeluaranActivity">
 
     <TextView
         android:id="@+id/tv_title"

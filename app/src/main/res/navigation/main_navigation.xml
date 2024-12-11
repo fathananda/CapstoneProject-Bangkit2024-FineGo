@@ -7,18 +7,18 @@
 
     <fragment
         android:id="@+id/budgetPlanningFragment"
-        android:name="com.dicoding.finego.BudgetPlanningFragment"
+        android:name="com.dicoding.finego.features.budgetplan.BudgetPlanningFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_budget_planning"/>
 
     <fragment
         android:id="@+id/transactionTrackingFragment"
-        android:name="com.dicoding.finego.TransactionTrackingFragment"
+        android:name="com.dicoding.finego.features.transactiontracking.TransactionTrackingFragment"
         android:label="fragment_finished_events"
         tools:layout="@layout/fragment_transaction_tracking" />
     <fragment
         android:id="@+id/monthlyReportFragment"
-        android:name="com.dicoding.finego.MonthlyReportFragment"
+        android:name="com.dicoding.finego.features.monthlyreport.MonthlyReportFragment"
         android:label="fragment_upcoming_events"
         tools:layout="@layout/fragment_monthly_report" />
 

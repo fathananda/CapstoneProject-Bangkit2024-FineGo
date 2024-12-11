@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/green"
     android:padding="16dp"
-    tools:context=".FormActivity"
+    tools:context=".features.form.FormActivity"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

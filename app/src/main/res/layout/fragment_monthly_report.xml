@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:padding="16dp"
     android:background="@color/green"
-    tools:context=".MonthlyReportFragment"
+    tools:context=".features.monthlyreport.MonthlyReportFragment"
     >
 
 

@@ -1,15 +1,15 @@
 package com.dicoding.finego.api
 
-import com.dicoding.finego.BudgetPlanResponse
-import com.dicoding.finego.LoginRequest
-import com.dicoding.finego.LoginResponse
-import com.dicoding.finego.MonthlyReportResponse
-import com.dicoding.finego.RegisterRequest
-import com.dicoding.finego.RegisterResponse
-import com.dicoding.finego.TransactionRequest
-import com.dicoding.finego.TransactionResponse
-import com.dicoding.finego.UserInputRequest
-import com.dicoding.finego.UserProfileResponse
+import com.dicoding.finego.features.budgetplan.BudgetPlanResponse
+import com.dicoding.finego.auth.login.LoginRequest
+import com.dicoding.finego.auth.login.LoginResponse
+import com.dicoding.finego.features.monthlyreport.MonthlyReportResponse
+import com.dicoding.finego.auth.register.RegisterRequest
+import com.dicoding.finego.auth.register.RegisterResponse
+import com.dicoding.finego.features.transactiontracking.TransactionRequest
+import com.dicoding.finego.features.transactiontracking.TransactionResponse
+import com.dicoding.finego.features.profile.UserInputRequest
+import com.dicoding.finego.features.profile.UserProfileResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
