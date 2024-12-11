@@ -47,13 +47,14 @@ class BudgetPlanningFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
                     val data = result.data.recommendations
                     val totalBudget = data.budget_plan.debt + data.budget_plan.water_bill + data.budget_plan.electricity_bill + data.budget_plan.housing_cost +  data.budget_plan.internet_cost + data.budget_plan.food_expenses + data.budget_plan.transportation_expenses
-                    binding.monthlyLimit.text = "Rp. ${data.monthly_limit.toInt()}"
+                    binding.monthlyLimit.text = getString(R.string.monthly_limit_format, data.monthly_limit.toInt())
                     binding.progressBarBatasBulanan.max = data.monthly_limit.toInt()
                     binding.progressBarBatasBulanan.progress = totalBudget
 
                     val savingsRate = data.savings_rate.toFloat().toInt()
                     binding.circularProgress.progress = savingsRate
-                    binding.centerProgressText.text = "$savingsRate%"
+                    binding.centerProgressText.text = getString(R.string.savings_rate_format, savingsRate)
+
 
                     binding.rvBudgetPlanning.apply {
                         layoutManager = LinearLayoutManager(context)

@@ -140,6 +140,14 @@
     <string name="item_name">Item Name</string>
     <string name="pengeluaran_tertinggi">Pengeluaran Tertinggi :</string>
     <string name="desember_2024">Desember 2024</string>
+    <string name="amount_format">Rp. %s</string>
+    <string name="monthly_limit_format">Rp. %d</string>
+    <string name="savings_rate_format">%d%%</string>
+    <string name="total_income">Rp. %d</string>
+    <string name="total_expense">Rp. %d</string>
+    <string name="balance">Rp. %d</string>
+
+
 
 
 </resources>

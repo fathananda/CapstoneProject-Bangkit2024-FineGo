@@ -91,9 +91,9 @@ class TransactionTrackingFragment : Fragment() {
                     val totalIncome = transactions.filter { it.type == "income" }.sumOf { it.amount }
                     val totalExpense = transactions.filter { it.type == "expense" }.sumOf { it.amount }
 
-                    binding.tvTotalPemasukan.text = "Rp. $totalIncome"
-                    binding.tvTotalPengeluaran.text = "Rp. $totalExpense"
-                    binding.tvSaldoNominal.text = "Rp. ${totalIncome - totalExpense}"
+                    binding.tvTotalPemasukan.text = getString(R.string.total_income, totalIncome)
+                    binding.tvTotalPengeluaran.text = getString(R.string.total_expense, totalExpense)
+                    binding.tvSaldoNominal.text = getString(R.string.balance, totalIncome - totalExpense)
                     if (transactions.isEmpty()) {
                         binding.rvTransaction.visibility = View.GONE
                         binding.llTransaksiKosong.visibility = View.VISIBLE

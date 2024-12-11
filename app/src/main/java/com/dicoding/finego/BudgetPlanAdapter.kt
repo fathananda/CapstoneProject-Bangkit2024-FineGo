@@ -37,7 +37,7 @@ class BudgetPlanAdapter(private val budgetPlan: BudgetPlan) :
 
         fun bind(name: String, amount: Int) {
             binding.tvItemName.text = name
-            binding.tvItemAmount.text = "Rp $amount"
+            binding.tvItemAmount.text = "Rp. $amount"
         }
     }
 }

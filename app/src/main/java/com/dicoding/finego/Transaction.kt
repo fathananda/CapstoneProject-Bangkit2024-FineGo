@@ -1,11 +1,11 @@
 package com.dicoding.finego
 
 data class Transaction(
-    val type: String, // "income" or "expense"
+    val type: String,
     val date: String,
     val category: String,
     val amount: Int,
-    val note: String? = null // Optional
+    val note: String? = null
 )
 
 data class TransactionRequest(

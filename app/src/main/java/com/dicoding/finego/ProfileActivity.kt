@@ -110,14 +110,11 @@ class ProfileActivity : AppCompatActivity() {
     private fun showMaterialDatePicker() {
         val calendar = Calendar.getInstance()
 
-        // Batas maksimal (hari ini)
         val maxDate = calendar.timeInMillis
 
-        // Batas minimal (opsional: 100 tahun ke belakang)
         calendar.add(Calendar.YEAR, -100)
         val minDate = calendar.timeInMillis
 
-        // Atur Constraint
         val constraintsBuilder = CalendarConstraints.Builder()
             .setValidator(DateValidatorPointBackward.before(maxDate)) // Tidak bisa pilih masa depan
             .setStart(minDate) // Mulai dari 100 tahun lalu

@@ -126,10 +126,10 @@ class FormActivity : AppCompatActivity() {
     private fun showMaterialDatePicker() {
         val calendar = Calendar.getInstance()
 
-        // Batas maksimal (hari ini)
+
         val maxDate = calendar.timeInMillis
 
-        // Batas minimal (opsional: 100 tahun ke belakang)
+
         calendar.add(Calendar.YEAR, -100)
         val minDate = calendar.timeInMillis
 

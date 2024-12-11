@@ -71,15 +71,12 @@ class LoginActivity : AppCompatActivity() {
             isPasswordVisible = !isPasswordVisible
             val selection = binding.edtPassword.selectionStart
             if (isPasswordVisible) {
-                // Tampilkan password
                 binding.edtPassword.transformationMethod = null
                 binding.imgTogglePassword.setImageResource(R.drawable.ic_visibility_on) // Icon mata terbuka
             } else {
-                // Sembunyikan password
                 binding.edtPassword.transformationMethod = android.text.method.PasswordTransformationMethod.getInstance()
                 binding.imgTogglePassword.setImageResource(R.drawable.ic_visibility_off) // Icon mata tertutup
             }
-            // Reset posisi kursor
             binding.edtPassword.setSelection(selection)
         }
     }

@@ -26,7 +26,7 @@ class TransactionAdapter : RecyclerView.Adapter<TransactionAdapter.ViewHolder>()
                 "transportation_expenses" -> "Transportasi"
                 "debt" -> "Hutang"
                 "other" -> "Lainnya"
-                else -> category // Default: gunakan nama asli
+                else -> category
             }
         }
 
@@ -37,7 +37,7 @@ class TransactionAdapter : RecyclerView.Adapter<TransactionAdapter.ViewHolder>()
                 transaction.category
             }
             binding.tvSumberPemasukan.text = categoryText
-            binding.tvNominal.text = "Rp ${transaction.amount}"
+            binding.tvNominal.text = "Rp. ${transaction.amount}"
             binding.tvCatatan.text = transaction.note
             binding.tvTanggal.text = transaction.date
             binding.ivIcon.setImageResource(
